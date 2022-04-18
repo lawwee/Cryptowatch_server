@@ -1,8 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
+require('dotenv').config()
 
 const authRoutes = require('./routes/auth');
+
+const MONGODB_URI = 
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
 
 const app = express();
 
@@ -28,10 +32,8 @@ app.use((error, req, res, next) => {
     res.status(status).json({ message: message, data: data});
 });
 
-mongoose.connect(
-    'mongodb+srv://Lawwee:U2sXBZLOOni4lymR@cluster0.vuuxv.mongodb.net/cryptowatch?retryWrites=true&w=majority'
-    )
+mongoose.connect(MONGODB_URI)
     .then(result => {
-        app.listen(8080);
+        app.listen(process.env.PORT || 8080);
     })
     .catch(err => console.log(err));
