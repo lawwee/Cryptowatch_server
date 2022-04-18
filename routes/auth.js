@@ -6,6 +6,19 @@ const router = express.Router();
 const User = require('../models/user');
 const authControl = require('../controllers/auth');
 
+/**
+ *  @swagger
+ * /signup:
+ *  put: 
+ *      description: Used to create new users
+ *      responses: 
+ *          '201': 
+ *              description: A successful response
+ *          '422':
+ *              description: Validation Error
+ *          '500':
+ *              description: 
+ */
 router.put(
     '/signup',
     [

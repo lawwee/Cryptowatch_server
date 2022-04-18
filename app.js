@@ -8,13 +8,33 @@ require('dotenv').config();
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
+const swaggerJs = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const authRoutes = require('./routes/auth');
 
+const app = express();
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: "Cryptowatch API",
+            description: "API endpoints for Cryptowatch",
+            contact: {
+                name: "Lawwee"
+            },
+            servers: ["https://localhost:8080"]
+        }
+    },
+    apis: ["routes/auth.js"]
+};
+
+const swaggerDocs = swaggerJs(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
 const MONGODB_URI = 
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
-
-const app = express();
 
 const accessLogStream = fs.createWriteStream(
     path.join(__dirname, 'access.log'),
