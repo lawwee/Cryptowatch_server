@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "Lawwee",
+        "MONGO_PASSWORD": "U2sXBZLOOni4lymR",
+        "MONGO_DEFAULT_DATABASE": "cryptowatch"
+    }
+}
