@@ -57,7 +57,7 @@ exports.login = async (req, res, next) => {
                 email: loadedUser.email,
                 userId: loadedUser._id.toString()
             },
-            'peterparkermilesmoralesgwenstaceymaryjaneharryosborn',
+            `${process.env.JWT_TOKEN}`,
             { expiresIn: '1h' }
         );
         res.status(200).json({

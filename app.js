@@ -11,10 +11,10 @@ const morgan = require('morgan');
 
 const authRoutes = require('./routes/auth');
 
+const app = express();
+
 const MONGODB_URI = 
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
-
-const app = express();
 
 const accessLogStream = fs.createWriteStream(
     path.join(__dirname, 'access.log'),
