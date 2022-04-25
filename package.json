@@ -29,9 +29,12 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.7.3",
     "nodemon": "^2.0.15",
+<<<<<<< HEAD
     "passport": "^0.5.2",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth2": "^0.2.0",
+=======
+>>>>>>> da0fcd486979ed9296430f9ea0405e7aa415f761
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.3.0"
   }
