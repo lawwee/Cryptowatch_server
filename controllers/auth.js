@@ -1,8 +1,9 @@
 const { validationResult } = require('express-validator');
-const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+
+const User = require('../models/user');
 const sendEmail = require('../util/sendmail');
 
 exports.signUp = async (req, res, next) => {
@@ -57,13 +58,19 @@ exports.login = async (req, res, next) => {
                 email: loadedUser.email,
                 userId: loadedUser._id.toString()
             },
-            'peterparkermilesmoralesgwenstaceymaryjaneharryosborn',
+            `${process.env.JWT_TOKEN}`,
             { expiresIn: '1h' }
         );
         res.status(200).json({
             token: token,
             userId: loadedUser._id.toString()
-        })
+        });
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        return req.session.save((err) => {
+            console.log(err);
+        });
+
     } catch (err) {
         if (!err.statusCode) {
             err.statuscode = 500;
@@ -146,4 +153,11 @@ exports.postNewPass = async (req, res, next) => {
         }
         next(err);
     }
-}
+};
+
+exports.postLogout = (req, res, next) => {
+    req.session.destroy(err => {
+        console.log(err);
+    });
+};
+
