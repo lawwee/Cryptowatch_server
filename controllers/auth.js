@@ -154,3 +154,10 @@ exports.postNewPass = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.postLogout = (req, res, next) => {
+    req.session.destroy(err => {
+        console.log(err);
+    });
+};
+

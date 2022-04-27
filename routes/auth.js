@@ -7,8 +7,15 @@ const router = express.Router();
 const User = require('../models/user');
 const authControl = require('../controllers/auth');
 
+// function isLoggedIn(req, res, next) {
+//     req.user ? next() : res.sendStatus(401)
+// }
+
 function isLoggedIn(req, res, next) {
-    req.user ? next() : res.sendStatus(401)
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.sendStatus(401);
 }
 
 router.put(
@@ -52,9 +59,9 @@ router.get('/reset/:token', authControl.getNewPass);
 
 router.post('/new-password', authControl.postNewPass);  
 
-router.get('/test', (req, res) => {
-    res.send(`<a href="/auth/google">Google Authentication</a>`);
-});
+// router.get('/test', (req, res) => {
+//     res.send(`<a href="/auth/google">Google Authentication</a>`);
+// });
 
 router.get(
     '/google',
@@ -69,18 +76,18 @@ router.get(
     })
 )
 
-router.get(
-    '/protected',
-    isLoggedIn,
-    (req, res) => {
-        res.send('Logged in bosk')
-    }
-)
+// router.get(
+//     '/protected',
+//     isLoggedIn,
+//     (req, res) => {
+//         res.send('Logged in bosk')
+//     }
+// )
 
-router.get('/failure', (req, res) => {
-    res.send('Your attempt failed boss');
-});
+// router.get('/failure', (req, res) => {
+//     res.send('Your attempt failed boss');
+// });
 
-
+router.post('/logout', authControl.postLogout);
 
 module.exports = router;

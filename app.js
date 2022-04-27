@@ -8,43 +8,17 @@ require('dotenv').config();
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
-<<<<<<< HEAD
 const passport = require('passport');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-=======
-const swaggerJs = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
->>>>>>> da0fcd486979ed9296430f9ea0405e7aa415f761
 
 const authRoutes = require('./routes/auth');
 const isAuth = require('./middleware/is-auth');
 require('./config/google_auth')(passport);
 
-const app = express();
-
-const swaggerOptions = {
-    swaggerDefinition: {
-        info: {
-            title: "Cryptowatch API",
-            description: "API endpoints for Cryptowatch",
-            contact: {
-                name: "Lawwee"
-            },
-            servers: ["https://localhost:8080"]
-        }
-    },
-    apis: ["routes/auth.js"]
-};
-
-const swaggerDocs = swaggerJs(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-
 const MONGODB_URI = 
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
 
-<<<<<<< HEAD
 const app = express();
 
 const store = new MongoDBStore({
@@ -64,9 +38,6 @@ app.get('/', (req, res) => {
     res.send('Hello World')
 });
 
-
-=======
->>>>>>> da0fcd486979ed9296430f9ea0405e7aa415f761
 const accessLogStream = fs.createWriteStream(
     path.join(__dirname, 'access.log'),
     { flags: 'a' }
