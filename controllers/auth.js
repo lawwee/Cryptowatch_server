@@ -5,12 +5,13 @@ const crypto = require('crypto');
 
 const User = require('../models/user');
 const sendEmail = require('../util/sendmail');
+const { token } = require('morgan');
 
 exports.signUp = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const error = new Error('Validation Failed');
-        console.log(err);
+        console.log(error);
         error.statusCode = 422;
         error.data = errors.array();
         throw error;
@@ -62,6 +63,7 @@ exports.login = async (req, res, next) => {
             { expiresIn: '1h' }
         );
         res.status(200).json({
+            message: 'logged in successfully',
             token: token,
             userId: loadedUser._id.toString()
         });
@@ -80,37 +82,44 @@ exports.login = async (req, res, next) => {
 };
 
 exports.resetPin = async (req, res, next) => {
-    try{
-        crypto.randomBytes(32, (err, buffer) => {
-            if (err) {
-                console.log(err);
-            }
-            const token = buffer.toString('hex');
-        })
-        const user = await User.findOne({ email: req.body.email })
-        if (!user) {
-            const error = new Error('Email not found');
-            error.statusCode = 401;
-            throw error;
+    const email = req.body.email;
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err);
         }
-        user.resetToken = token;
-        // time is in miliseconds
-        user.resetTokenExpiration = Date.now() + 3600000;
-        await user.save();
-        const result = await sendEmail({
-            to: req.body.email,
-            subject: 'Password Reset',
-            html: `
-            <p> You requested a password reset </p>
-            <p> Click this <a href="URL/${token}">link</a> to set a new password.</p>
-        `
-        })
-    } catch (err) {
-        if (!err.statusCode) {
-            err.statuscode = 500;
-        }
-        next(err);
-    }
+        const token = buffer.toString('hex');
+        User.findOne({ email: email })
+            .then(user => {
+                if(!user) {
+                    const error = new Error('Email not found');
+                    error.statusCode = 401;
+                    throw error;
+                }
+                user.resetToken = token;
+                user.resetTokenExpiration = Date.now() + 3600000;
+                return user.save();
+            })
+            .then(result => {
+                res.status(200).json({
+                    message: 'requested a password change',
+                    token: token,
+                });
+                sendEmail({
+                    to: email,
+                    subject: 'Password Reset',
+                    html: `
+                        <p> You requested a password reset </p>
+                        <p> Click this <a href="http://localhost:8080/auth/reset/${token}">link</a> to set a new password.</p>
+                    `
+                })       
+            })
+            .catch(err => {
+                if (!err.statusCode) {
+                    err.statuscode = 500;
+                }
+                next(err);
+            })
+    });
 };
 
 exports.getNewPass = async (req, res, next) => {
@@ -119,7 +128,10 @@ exports.getNewPass = async (req, res, next) => {
         const user = await User.findOne({
             resetToken: token,
             resetTokenExpiration: { $gt: Date.now() }
-        })
+        });
+        res.status(200).json({
+            message: 'new password request',
+        });
     } catch (err) {
         if (!err.statusCode) {
             err.statuscode = 500;
@@ -131,7 +143,7 @@ exports.getNewPass = async (req, res, next) => {
 exports.postNewPass = async (req, res, next) => {
     const newPassword = req.body.password;
     const userId = req.body.userId;
-    const passwordToken = req.body.passwordToken;
+    const passwordToken = req.body.token;
     let resetUser;
     try {
         const user = await User.findOne({
@@ -145,8 +157,9 @@ exports.postNewPass = async (req, res, next) => {
             resetUser.password = hashedPassword;
             resetUser.resetToken = undefined;
             resetUser.resetTokenExpiration = undefined;
-        }
-        resetUser.save();
+            resetUser.save();
+        };
+        res.status(200).json({ message: 'password changed'});
     } catch (err) {
         if (!err.statusCode) {
             err.statuscode = 500;
@@ -159,5 +172,6 @@ exports.postLogout = (req, res, next) => {
     req.session.destroy(err => {
         console.log(err);
     });
+    res.status(200).json({ message: 'logged out' });
 };
 

@@ -12,7 +12,7 @@ const userSchema = new Schema ({
         required: true
     },
     resetToken: String,
-    resetTokenExpiration: Date
+    resetTokenExpiration: Date,
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -18,7 +18,7 @@ function isLoggedIn(req, res, next) {
     res.sendStatus(401);
 }
 
-router.put(
+router.post(
     '/signup',
     [
         body('email')

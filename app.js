@@ -13,7 +13,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const authRoutes = require('./routes/auth');
-const isAuth = require('./middleware/is-auth');
+const feedRoutes = require('./routes/feed');
 require('./config/google_auth')(passport);
 
 const MONGODB_URI = 
@@ -60,6 +60,7 @@ app.use((req, res, next) => {
 app.use(bodyparser.json());
 
 app.use('/auth', authRoutes);
+app.use('/feed', feedRoutes);
 
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
