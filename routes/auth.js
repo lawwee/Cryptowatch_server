@@ -11,14 +11,7 @@ const authControl = require('../controllers/auth');
 //     req.user ? next() : res.sendStatus(401)
 // }
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next()
-    }
-    res.sendStatus(401);
-}
-
-router.put(
+router.post(
     '/signup',
     [
         body('email')
