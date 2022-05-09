@@ -8,14 +8,12 @@ require('dotenv').config();
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
-const passport = require('passport');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 const authRoutes = require('./routes/auth');
 const feedRoutes = require('./routes/feed');
 const watchlistRoutes = require('./routes/watchlist');
-require('./config/google_auth')(passport);
 
 const MONGODB_URI = 
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
@@ -32,8 +30,6 @@ app.use(session({
     saveUninitialized: false,
     store: store
 }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.get('/', (req, res) => {
     res.send('Hello World')
@@ -93,14 +89,6 @@ app.use((error, req, res, next) => {
     const data = error.data;
     res.status(status).json({ message: message, data: data});
 });
-
-app.get('/logout', (req, res) => {
-    req.logout();
-    req.session.destroy(err => {
-        console.log(err);
-    });
-    res.send('Bye bosk');
-})
 
 mongoose.connect(MONGODB_URI)
     .then(result => {

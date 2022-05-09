@@ -1,15 +1,10 @@
 const express = require('express');
 const { body } = require('express-validator');
-const passport = require('passport');
 
 const router = express.Router();
 
 const User = require('../models/user');
 const authControl = require('../controllers/auth');
-
-// function isLoggedIn(req, res, next) {
-//     req.user ? next() : res.sendStatus(401)
-// }
 
 router.post(
     '/signup',
@@ -51,35 +46,6 @@ router.post('/reset', authControl.resetPin);
 router.get('/reset/:token', authControl.getNewPass);
 
 router.post('/new-password', authControl.postNewPass);  
-
-// router.get('/test', (req, res) => {
-//     res.send(`<a href="/auth/google">Google Authentication</a>`);
-// });
-
-router.get(
-    '/google',
-    passport.authenticate('google', { scope: ['email', 'profile'] })    
-);
-
-router.get(
-    '/google/callback',
-    passport.authenticate('google', {
-        successRedirect: '/auth/protected',
-        failureRedirect: '/auth/failure'
-    })
-)
-
-// router.get(
-//     '/protected',
-//     isLoggedIn,
-//     (req, res) => {
-//         res.send('Logged in bosk')
-//     }
-// )
-
-// router.get('/failure', (req, res) => {
-//     res.send('Your attempt failed boss');
-// });
 
 router.post('/logout', authControl.postLogout);
 
