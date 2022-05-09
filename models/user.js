@@ -13,6 +13,12 @@ const userSchema = new Schema ({
     },
     resetToken: String,
     resetTokenExpiration: Date,
+    watchlists: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Watchlist'
+        }
+    ]
 });
 
 module.exports = mongoose.model('User', userSchema);
