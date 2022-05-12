@@ -14,6 +14,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const authRoutes = require('./routes/auth');
 const feedRoutes = require('./routes/feed');
 const watchlistRoutes = require('./routes/watchlist');
+const alertRoutes = require('./routes/alert');
 
 const MONGODB_URI = 
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
@@ -58,7 +59,8 @@ app.use(bodyparser.json());
 
 app.use('/auth', authRoutes);
 app.use('/feed', feedRoutes);
-app.use('/pers', watchlistRoutes);
+app.use('/watchlist', watchlistRoutes);
+app.use('/notify', alertRoutes);
 
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
