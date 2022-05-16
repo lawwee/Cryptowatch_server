@@ -17,7 +17,7 @@ exports.fullWatchlist = async (req, res, next) => {
     try {
         const totalItems = await Watchlist.find().countDocuments()
         const watchlists = await Watchlist.find().populate('user');
-        res.json({
+        res.status(200).json({
             watchlists: watchlists,
             totalItems: totalItems
         });

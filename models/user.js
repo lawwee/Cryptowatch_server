@@ -18,6 +18,12 @@ const userSchema = new Schema ({
             type: Schema.Types.ObjectId,
             ref: 'Watchlist'
         }
+    ],
+    alerts: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Alert'
+        }
     ]
 });
 

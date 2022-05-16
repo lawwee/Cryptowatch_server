@@ -1,7 +1,7 @@
 module.exports = {
-    service: "gmail",
+    service: `${process.env.NODEMAIL_SERVICE}`,
     auth: {
-        user: "lawweetest@gmail.com",
-        pass: "iamdafuture1"
+        user: `${process.env.NODEMAIL_USERNAME}`,
+        pass: `${process.env.NODEMAIL_PASSWORD}`
     },
 };

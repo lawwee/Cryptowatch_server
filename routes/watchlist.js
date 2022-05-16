@@ -6,7 +6,7 @@ const router = express.Router();
 
 const watchlistControl = require('../controllers/watchlist');
 
-router.get('/watchlist', isAuth, watchlistControl.fullWatchlist);
+router.get('/fullwatchlist', isAuth, watchlistControl.fullWatchlist);
 
 router.post('/addwatchlist/:coin', isAuth, watchlistControl.addToWatchlist);
 
