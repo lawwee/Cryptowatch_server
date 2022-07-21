@@ -17,7 +17,7 @@ const watchlistRoutes = require('./routes/watchlist');
 const alertRoutes = require('./routes/alert');
 
 const MONGODB_URI = 
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.vuuxv.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cryptowatch.rsniqey.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
 
 const app = express();
 
